@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stratégie ITSM / ITSM Strategie / ITSM Strategy - SFPD</title>
+    <style>
+        :root {
+            --primary: #1B2D5B; /* Bleu Marine */
+            --secondary: #B71E4C; /* Fuchsia/Rose */
+            --tertiary: #2CA1AC; /* Turquoise */
+            --warning: #eab308; /* Jaune/Orange pour Faiblesses */
+            --bg-body: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-main: #334155;
+            --text-light: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            overflow: hidden;
+        }
+
+        /* Système Multilingue CSS */
+        .fr, .nl, .en { display: none; }
+        body.lang-fr .fr { display: block; }
+        body.lang-nl .nl { display: block; }
+        body.lang-en .en { display: block; }
+        
+        span.fr, span.nl, span.en { display: none; }
+        body.lang-fr span.fr { display: inline; }
+        body.lang-nl span.nl { display: inline; }
+        body.lang-en span.en { display: inline; }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 320px;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        .logo-container {
+            padding: 30px 20px;
+            text-align: center;
+            background-color: #ffffff; 
+        }
+
+        .logo-container img {
+            max-width: 140px;
+            height: auto;
+        }
+
+        /* Sélecteur de langue */
+        .lang-switcher {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px;
+            background-color: #152246; /* Bleu légèrement plus foncé */
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .lang-btn:hover { background-color: rgba(255,255,255,0.1); }
+        .lang-btn.active { background-color: var(--secondary); border-color: var(--secondary); }
+
+        .nav-menu {
+            flex: 1;
+            padding: 15px 0;
+            overflow-y: auto;
+        }
+
+        .nav-btn {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.7);
+            padding: 16px 20px;
+            text-align: left;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 5px solid transparent;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-btn:hover { color: white; background-color: rgba(255,255,255,0.05); }
+        .nav-btn.active { color: white; background-color: rgba(255,255,255,0.1); border-left-color: var(--secondary); font-weight: 600; }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 50px;
+            scroll-behavior: smooth;
+        }
+
+        .tab-pane {
+            display: none;
+            max-width: 1100px;
+            margin: 0 auto;
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        .tab-pane.active { display: block; }
+
+        /* Typography & Layout */
+        h1 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            border-bottom: 4px solid var(--tertiary);
+            padding-bottom: 12px;
+            margin-bottom: 35px;
+        }
+
+        h2 {
+            color: var(--secondary);
+            font-size: 1.5rem;
+            margin: 35px 0 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        h2::before {
+            content: "";
+            display: inline-block;
+            width: 10px;
+            height: 22px;
+            background-color: var(--tertiary);
+            border-radius: 3px;
+        }
+
+        h3 { color: var(--primary); font-size: 1.15rem; margin: 20px 0 10px 0; }
+        p, li { line-height: 1.6; margin-bottom: 12px; font-size: 1rem; }
+        ul { padding-left: 20px; margin-bottom: 15px; }
+
+        /* Cards */
+        .card {
+            background-color: var(--bg-card);
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            margin-bottom: 25px;
+            border-top: 4px solid var(--tertiary);
+        }
+
+        .card.accent-rose { border-top-color: var(--secondary); }
+        .card.accent-blue { border-top-color: var(--primary); }
+
+        /* Tables - Corrigé pour l'alignement */
+        .table-container { 
+            width: 100%; 
+            overflow-x: auto; 
+            border-radius: 6px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+            margin: 25px 0; 
+            border: 1px solid #e2e8f0;
+        }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            background-color: white; 
+            font-size: 0.95rem; 
+        }
+        th, td { 
+            padding: 14px 18px; 
+            text-align: left; 
+            border-bottom: 1px solid #e2e8f0; 
+            vertical-align: top;
+        }
+        th { 
+            background-color: var(--primary); 
+            color: white; 
+            font-weight: 600; 
+            white-space: normal; 
+        }
+        tr:nth-child(even) { background-color: #f8fafc; }
+        tr:hover { background-color: #f1f5f9; }
+
+        /* --- STYLES SPECIFIQUES SWOT --- */
+        .swot-nav-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .swot-tab-btn {
+            padding: 8px 20px;
+            border: 1px solid var(--primary);
+            border-radius: 30px;
+            background-color: transparent;
+            color: var(--primary);
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .swot-tab-btn:hover {
+            background-color: rgba(27, 45, 91, 0.05);
+        }
+
+        .swot-tab-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .swot-content { display: none; }
+        .swot-content.active { display: block; animation: fadeIn 0.4s ease-out; }
+
+        .swot-header-subtitle {
+            color: var(--tertiary);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .swot-header-title {
+            color: var(--secondary);
+            font-size: 1.6rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .swot-header-title::before {
+            content: "";
+            display: inline-block;
+            width: 8px;
+            height: 24px;
+            background-color: var(--tertiary);
+            border-radius: 4px;
+        }
+
+        .swot-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .swot-box {
+            background-color: #f8fafc;
+            padding: 25px;
+            border-radius: 6px;
+            border-left: 4px solid;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        .swot-box.s { border-left-color: var(--primary); }
+        .swot-box.w { border-left-color: var(--warning); }
+        .swot-box.o { border-left-color: var(--tertiary); }
+        .swot-box.t { border-left-color: var(--secondary); }
+
+        .swot-box h4 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .swot-box.s h4 { color: var(--primary); }
+        .swot-box.w h4 { color: var(--warning); }
+        .swot-box.o h4 { color: var(--tertiary); }
+        .swot-box.t h4 { color: var(--secondary); }
+
+        .swot-box ul { padding-left: 18px; margin-bottom: 0; }
+        .swot-box li { color: var(--text-main); margin-bottom: 10px; font-size: 0.95rem; }
+        .swot-box li:last-child { margin-bottom: 0; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- STYLES : Cartes "Option en bref" (Principe/Avantages/Inconvénients) --- */
+        .option-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 18px;
+            margin-bottom: 10px;
+        }
+
+        .option-card {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 0 1 300px;
+            min-width: 250px;
+        }
+
+        .option-card .opt-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .option-card .opt-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1rem;
+        }
+
+        .option-card .opt-principe { font-size: 0.9rem; color: var(--text-light); font-style: italic; }
+
+        .option-card .opt-row { font-size: 0.88rem; line-height: 1.5; }
+        .option-card .opt-row strong { margin-bottom: 3px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .option-card .opt-row.plus strong { color: var(--tertiary); }
+        .option-card .opt-row.minus strong { color: var(--secondary); }
+
+        /* --- STYLES : Callout / encart d'alerte --- */
+        .callout {
+            border-radius: 6px;
+            padding: 18px 22px;
+            margin: 20px 0;
+            border-left: 4px solid;
+            font-size: 0.95rem;
+        }
+        .callout-warning { background-color: #fffbeb; border-left-color: var(--warning); }
+        .callout-info { background-color: #eff8fb; border-left-color: var(--tertiary); }
+        .callout h4 { margin-bottom: 8px; font-size: 0.95rem; color: var(--text-main); }
+
+        /* --- STYLES : Matrice d'arbitrage (SVG) --- */
+        .matrix-wrap { width: 100%; overflow-x: auto; margin: 10px 0 20px 0; }
+        .matrix-wrap svg { width: 100%; height: auto; min-width: 480px; display: block; }
+        .matrix-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 12px;
+            font-size: 0.85rem;
+        }
+        .matrix-legend span { display: inline-flex; align-items: center; gap: 6px; }
+        .matrix-legend i { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+
+        /* --- STYLES : badges de stats rapides --- */
+        .stat-strip {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin: 18px 0;
+        }
+        .stat-pill {
+            background-color: #f1f5f9;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; flex-direction: column; }
+            .logo-container { padding: 10px; border: none; background: #fff; }
+            .logo-container img { max-width: 120px; }
+            .nav-menu { display: flex; overflow-x: auto; padding: 0; flex-direction: row; }
+            .nav-btn { padding: 12px; white-space: nowrap; border-left: none; border-bottom: 4px solid transparent; }
+            .nav-btn.active { border-left: none; border-bottom-color: var(--secondary); }
+            .swot-grid { grid-template-columns: 1fr; }
+            .option-card { flex-basis: 100%; }
+            .main-content { padding: 20px; }
+        }
+    </style>
+</head>
+<body class="lang-fr">
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="logo-container">
+            <img src="logo.png" alt="Logo SFPD">
+        </div>
+        
+        <!-- Language Switcher -->
+        <div class="lang-switcher">
+            <button class="lang-btn active" id="btn-fr" onclick="switchLanguage('fr')">FR</button>
+            <button class="lang-btn" id="btn-nl" onclick="switchLanguage('nl')">NL</button>
+            <button class="lang-btn" id="btn-en" onclick="switchLanguage('en')">EN</button>
+        </div>
+
+        <div class="nav-menu">
+            <button class="nav-btn active" onclick="openTab(event, 'contexte')">
+                <span class="fr">1. Contexte & Cartographie</span>
+                <span class="nl">1. Context & In Kaart Brengen</span>
+                <span class="en">1. Context & Mapping</span>
+            </button>
+            <button class="nav-btn" onclick="openTab(event, 'options')">
+                <span class="fr">2. Options & SWOT</span>
+                <span class="nl">2. Opties & SWOT</span>
+                <span class="en">2. Options & SWOT</span>
+            </button>
+            <button class="nav-btn" onclick="openTab(event, 'finances')">
+                <span class="fr">3. Synthèse Financière & TCO</span>
+                <span class="nl">3. Financiële Synthese & TCO</span>
+                <span class="en">3. Financial Synthesis & TCO</span>
+            </button>
+            <button class="nav-btn" onclick="openTab(event, 'souverainete')">
+                <span class="fr">4. Souveraineté & Risques</span>
+                <span class="nl">4. Soevereiniteit & Risico's</span>
+                <span class="en">4. Sovereignty & Risks</span>
+            </button>
+            <button class="nav-btn" onclick="openTab(event, 'recommandation')">
+                <span class="fr">5. Recommandation Finale</span>
+                <span class="nl">5. Definitieve Aanbeveling</span>
+                <span class="en">5. Final Recommendation</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- TAB 1 : Contexte et Cartographie -->
+        <section id="contexte" class="tab-pane active">
+            <h1 class="fr">Stratégie de renouvellement de l'outil ITSM</h1>
+            <h1 class="nl">Vernieuwingsstrategie voor de ITSM-tool</h1>
+            <h1 class="en">ITSM Tool Renewal Strategy</h1>
+            
+            <div class="card">
+                <h2 class="fr">1. Contexte et Objectifs</h2>
+                <h2 class="nl">1. Context en Doelstellingen</h2>
+                <h2 class="en">1. Context and Objectives</h2>
+                
+                <div class="fr">
+                    <p>Les licences de notre outil ITSM actuel, EasyVista, arrivent à échéance le 30/04/2027. Dans le respect strict des règles des marchés publics, une évaluation comparative approfondie a été menée pour déterminer la trajectoire technologique et financière la plus avantageuse pour le SFPD.</p>
+                    <p>L'enjeu de cette décision dépasse le simple choix d'un outil. Il s'agit de garantir la continuité de nos services informatiques et métiers pour nos 2 300 utilisateurs finaux et nos 541 validateurs (SPOCs et Evaluateurs), tout en maîtrisant les coûts et la charge de travail de nos équipes (160 utilisateurs Back-office). Nos ressources internes sont en effet mobilisées sur d’autres projets critiques : la migration de nos 1 200 postes de travail vers un modèle cloud-native managé sous Entra ID, le déploiement de Windows Hello for Business…</p>
+                </div>
+                <div class="nl">
+                    <p>De licenties van onze huidige ITSM-tool, EasyVista, vervallen op 30/04/2027. In strikte naleving van de regels voor overheidsopdrachten is een grondige vergelijkende evaluatie uitgevoerd om het meest voordelige technologische en financiële traject voor de FPD (SFPD) te bepalen.</p>
+                    <p>De inzet van deze beslissing overstijgt de simpele keuze van een tool. Het gaat erom de continuïteit van onze IT- en bedrijfsdiensten te garanderen voor onze 2.300 eindgebruikers en onze 541 hoofdvalidatoren (SPOC's en Evaluators), terwijl we de kosten en de werklast van onze teams (160 Back-office gebruikers) beheersen. Onze interne middelen zijn namelijk gemobiliseerd voor andere kritieke projecten: de migratie van onze 1.200 werkplekken naar een beheerd cloud-native model onder Entra ID, de implementatie van Windows Hello for Business...</p>
+                </div>
+                <div class="en">
+                    <p>The licenses for our current ITSM tool, EasyVista, will expire on 04/30/2027. In strict compliance with public procurement rules, an in-depth comparative evaluation was conducted to determine the most advantageous technological and financial trajectory for the SFPD.</p>
+                    <p>The stakes of this decision go beyond the simple choice of a tool. It is about guaranteeing the continuity of our IT and business services for our 2,300 end users and our 541 key validators (SPOCs and Evaluators), while controlling costs and the workload of our teams (160 Back-office users). Our internal resources are indeed mobilized on other critical projects: the migration of our 1,200 workstations to a managed cloud-native model under Entra ID, the deployment of Windows Hello for Business...</p>
+                </div>
+            </div>
+
+            <div class="card accent-blue">
+                <h2 class="fr">2. Cartographie Réelle de nos Référentiels (CMDB & Processus)</h2>
+                <h2 class="nl">2. Werkelijke In Kaart Brenging van onze Referentiebestanden (CMDB & Processen)</h2>
+                <h2 class="en">2. Actual Mapping of our Repositories (CMDB & Processes)</h2>
+                
+                <p class="fr">Afin de fonder notre comparaison sur des bases objectives et d'éviter les frais d'analyse ou de dérive de périmètre ("scope creep") avec les intégrateurs, nos bases de production actuelles ont été rigoureusement assainies :</p>
+                <p class="nl">Om onze vergelijking op objectieve gronden te baseren en analysekosten of "scope creep" met integratoren te vermijden, zijn onze huidige productie-databases strikt opgeschoond:</p>
+                <p class="en">In order to base our comparison on objective grounds and avoid analysis costs or "scope creep" with integrators, our current production databases have been strictly cleaned up:</p>
+                
+                <ul class="fr">
+                    <li>Le catalogue de services (ESM) comprend 89 formulaires actifs : 65 pour l'IT, 21 pour la Logistique et 3 flux transverses complexes pour les ressources humaines (Mouvements P&O).</li>
+                    <li>Le périmètre des workflows (W/F) a été rationalisé de 57 à 19 actifs (les 38 autres ayant été officiellement archivés et exclus du périmètre de migration).</li>
+                    <li>Notre référentiel d'objets (Arborescence ROOT commun) compte 2 612 éléments réels.</li>
+                </ul>
+                <ul class="nl">
+                    <li>De dienstencatalogus (ESM) bevat 89 actieve formulieren: 65 voor IT, 21 voor Logistiek en 3 complexe transversale stromen voor HR (P&O-bewegingen).</li>
+                    <li>De reikwijdte van de workflows (W/F) is gerationaliseerd van 57 naar 19 actieve (de overige 38 zijn officieel gearchiveerd en uitgesloten van de migratiescope).</li>
+                    <li>Ons objectenreferentiebestand (gemeenschappelijke ROOT-structuur) telt 2.612 werkelijke elementen.</li>
+                </ul>
+                <ul class="en">
+                    <li>The service catalog (ESM) includes 89 active forms: 65 for IT, 21 for Logistics and 3 complex transverse flows for HR (P&O movements).</li>
+                    <li>The scope of workflows (W/F) has been rationalized from 57 to 19 active ones (the other 38 having been officially archived and excluded from the migration scope).</li>
+                    <li>Our object repository (common ROOT structure) contains 2,612 actual elements.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- TAB 2 : Options & SWOT -->
+        <section id="options" class="tab-pane">
+            <h1 class="fr">Analyse des options envisagées</h1>
+            <h1 class="nl">Analyse van de overwogen opties</h1>
+            <h1 class="en">Analysis of considered options</h1>
+            
+            <div class="card">
+                <h2 class="fr">3. Analyse des options envisagées</h2>
+                <h2 class="nl">3. Analyse van de overwogen opties</h2>
+                <h2 class="en">3. Analysis of the options considered</h2>
+
+                <div class="option-grid">
+                    <!-- Option 1 -->
+                    <div class="option-card">
+                        <div class="opt-title"><span class="opt-num">1</span><span>EasyVista</span></div>
+                        <p class="opt-principe fr">Reconduction du contrat SaaS actuel avec montée de version vers le "Pack Pro" (IA & intégration collaborative).</p>
+                        <p class="opt-principe nl">Verlenging van het huidige SaaS-contract met upgrade naar het "Pack Pro" (AI & samenwerkingsintegratie).</p>
+                        <p class="opt-principe en">Renewal of the current SaaS contract with an upgrade to the "Pack Pro" (AI & collaborative integration).</p>
+                        <div class="opt-row plus">
+                            <strong class="fr">Avantages</strong><strong class="nl">Voordelen</strong><strong class="en">Advantages</strong>
+                            <span class="fr">Zéro CAPEX, 541 validateurs sans surcoût, continuité totale, risque d'implémentation nul.</span>
+                            <span class="nl">Nul CAPEX, 541 validatoren zonder meerkost, volledige continuïteit, geen implementatierisico.</span>
+                            <span class="en">Zero CAPEX, 541 validators at no extra cost, total continuity, zero implementation risk.</span>
+                        </div>
+                        <div class="opt-row minus">
+                            <strong class="fr">Inconvénients</strong><strong class="nl">Nadelen</strong><strong class="en">Disadvantages</strong>
+                            <span class="fr">Outil historique — critiques ergonomiques désormais adressées par un chatbot MS Teams natif et Pulse AI.</span>
+                            <span class="nl">Historische tool — ergonomische kritiek nu verholpen door een native MS Teams-chatbot en Pulse AI.</span>
+                            <span class="en">Legacy tool — ergonomic criticism now addressed by a native MS Teams chatbot and Pulse AI.</span>
+                        </div>
+                    </div>
+                    <!-- Option 2 -->
+                    <div class="option-card">
+                        <div class="opt-title"><span class="opt-num">2</span><span>Jira Service Management</span></div>
+                        <p class="opt-principe fr">Migration complète vers Jira Cloud Premium, via le contrat-cadre Cegeka.</p>
+                        <p class="opt-principe nl">Volledige migratie naar Jira Cloud Premium, via het raamcontract met Cegeka.</p>
+                        <p class="opt-principe en">Full migration to Jira Cloud Premium, via the Cegeka framework contract.</p>
+                        <div class="opt-row plus">
+                            <strong class="fr">Avantages</strong><strong class="nl">Voordelen</strong><strong class="en">Advantages</strong>
+                            <span class="fr">Consolidation avec l'écosystème Atlassian, interface moderne, validateurs sans licence payante.</span>
+                            <span class="nl">Consolidatie met het Atlassian-ecosysteem, moderne interface, validatoren zonder betaalde licentie.</span>
+                            <span class="en">Consolidation with the Atlassian ecosystem, modern interface, validators without a paid license.</span>
+                        </div>
+                        <div class="opt-row minus">
+                            <strong class="fr">Inconvénients</strong><strong class="nl">Nadelen</strong><strong class="en">Disadvantages</strong>
+                            <span class="fr">184 837 € HT d'implémentation, refonte complète des 19 workflows et de la CMDB, hausse Atlassian ~10 %/an.</span>
+                            <span class="nl">184.837 € HT implementatie, volledige herziening van de 19 workflows en de CMDB, Atlassian-verhoging ~10 %/jaar.</span>
+                            <span class="en">€184,837 excl. VAT implementation, full overhaul of the 19 workflows and CMDB, ~10%/yr Atlassian price rise.</span>
+                        </div>
+                    </div>
+                    <!-- Option 3 -->
+                    <div class="option-card">
+                        <div class="opt-title"><span class="opt-num">3</span><span>ServiceNow</span></div>
+                        <p class="opt-principe fr">Migration vers l'outil leader du marché ITSM, via le contrat-cadre Smals.</p>
+                        <p class="opt-principe nl">Migratie naar de marktleider in ITSM-tools, via het Smals-raamcontract.</p>
+                        <p class="opt-principe en">Migration to the ITSM market-leading tool, via the Smals framework contract.</p>
+                        <div class="opt-row plus">
+                            <strong class="fr">Avantages</strong><strong class="nl">Voordelen</strong><strong class="en">Advantages</strong>
+                            <span class="fr">Puissance de l'outil, rigueur des processus ITIL natifs, excellence de la plateforme.</span>
+                            <span class="nl">Krachtige tool, strikte native ITIL-processen, uitmuntend platform.</span>
+                            <span class="en">Powerful tool, rigorous native ITIL processes, platform excellence.</span>
+                        </div>
+                        <div class="opt-row minus">
+                            <strong class="fr">Inconvénients</strong><strong class="nl">Nadelen</strong><strong class="en">Disadvantages</strong>
+                            <span class="fr">250 000 à 300 000 € HT (18-20 sem.), licences "Business Stakeholder" imposées : +57 024 € HT/an pour les approbations.</span>
+                            <span class="nl">250.000 à 300.000 € HT (18-20 wkn), verplichte "Business Stakeholder"-licenties: +57.024 € HT/jaar voor goedkeuringen.</span>
+                            <span class="en">€250,000-300,000 excl. VAT (18-20 wks), mandatory "Business Stakeholder" licenses: +€57,024 excl. VAT/yr for approvals.</span>
+                        </div>
+                    </div>
+                    <!-- Option 4 -->
+                    <div class="option-card">
+                        <div class="opt-title"><span class="opt-num">4</span><span>GLPI</span></div>
+                        <p class="opt-principe fr">Déploiement d'une solution libre (Open Source).</p>
+                        <p class="opt-principe nl">Implementatie van een vrije (Open Source) oplossing.</p>
+                        <p class="opt-principe en">Deployment of a free, open-source solution.</p>
+                        <div class="opt-row plus">
+                            <strong class="fr">Avantages</strong><strong class="nl">Voordelen</strong><strong class="en">Advantages</strong>
+                            <span class="fr">Pas de coûts directs liés aux licences.</span>
+                            <span class="nl">Geen directe licentiekosten.</span>
+                            <span class="en">No direct license costs.</span>
+                        </div>
+                        <div class="opt-row minus">
+                            <strong class="fr">Inconvénients</strong><strong class="nl">Nadelen</strong><strong class="en">Disadvantages</strong>
+                            <span class="fr">Coûts cachés (mise en conformité NIS2, infrastructure, sécurisation) et lourd effort d'intégration des modules hors-IT (ESM).</span>
+                            <span class="nl">Verborgen kosten (NIS2-conformering, infrastructuur, beveiliging) en zware integratie-inspanning voor niet-IT-modules (ESM).</span>
+                            <span class="en">Hidden costs (NIS2 compliance, infrastructure, hardening) and heavy integration effort for non-IT (ESM) modules.</span>
+                        </div>
+                    </div>
+                    <!-- Option 5 -->
+                    <div class="option-card">
+                        <div class="opt-title"><span class="opt-num">5</span><span class="fr">Développement interne</span><span class="nl">Interne ontwikkeling</span><span class="en">Internal development</span></div>
+                        <p class="opt-principe fr">Mise en production et évolution du prototype .NET existant (continuité de HR-NET, KM-NET...).</p>
+                        <p class="opt-principe nl">Productiename en verdere ontwikkeling van het bestaande .NET-prototype (continuïteit van HR-NET, KM-NET...).</p>
+                        <p class="opt-principe en">Productionizing and evolving the existing .NET prototype (continuity of HR-NET, KM-NET...).</p>
+                        <div class="opt-row plus">
+                            <strong class="fr">Avantages</strong><strong class="nl">Voordelen</strong><strong class="en">Advantages</strong>
+                            <span class="fr">Solution 100 % sur mesure, adaptée à la réalité du terrain.</span>
+                            <span class="nl">100% oplossing op maat, aangepast aan de realiteit op het terrein.</span>
+                            <span class="en">100% tailor-made solution, adapted to the reality on the ground.</span>
+                        </div>
+                        <div class="opt-row minus">
+                            <strong class="fr">Inconvénients</strong><strong class="nl">Nadelen</strong><strong class="en">Disadvantages</strong>
+                            <span class="fr">Risque de SPOF sur les développeurs internes ; dette technique exponentielle (SLA, CMDB, patchs de sécurité à coder de zéro).</span>
+                            <span class="nl">SPOF-risico bij interne ontwikkelaars; exponentiële technische schuld (SLA, CMDB, security patches vanaf nul coderen).</span>
+                            <span class="en">SPOF risk on internal developers; exponential technical debt (SLAs, CMDB, security patches coded from scratch).</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card accent-rose" style="border-top: none; padding-top: 0;">
+                <h2 class="fr">6. Analyse SWOT des solutions envisagées</h2>
+                <h2 class="nl">6. SWOT-analyse van de overwogen oplossingen</h2>
+                <h2 class="en">6. SWOT analysis of the considered solutions</h2>
+
+                <!-- SWOT Navigation Tabs -->
+                <div class="swot-nav-tabs">
+                    <button class="swot-tab-btn active" onclick="showSwot(event, 'swot-ev')">1. EasyVista</button>
+                    <button class="swot-tab-btn" onclick="showSwot(event, 'swot-jira')">2. Jira Service Management</button>
+                    <button class="swot-tab-btn" onclick="showSwot(event, 'swot-snow')">3. ServiceNow</button>
+                    <button class="swot-tab-btn" onclick="showSwot(event, 'swot-glpi')">4. GLPI</button>
+                    <button class="swot-tab-btn" onclick="showSwot(event, 'swot-net')">
+                        <span class="fr">5. Solution Interne</span>
+                        <span class="nl">5. Interne Oplossing</span>
+                        <span class="en">5. Internal Solution</span>
+                    </button>
+                </div>
+
+                <!-- SWOT 1 : EasyVista -->
+                <div id="swot-ev" class="swot-content active">
+                    <div class="swot-header-subtitle">OPTION 1</div>
+                    <div class="swot-header-title">
+                        <span class="fr">Analyse SWOT : Renouvellement EasyVista</span>
+                        <span class="nl">SWOT Analyse : Vernieuwing EasyVista</span>
+                        <span class="en">SWOT Analysis : EasyVista Renewal</span>
+                    </div>
+                    
+                    <div class="swot-grid">
+                        <div class="swot-box s">
+                            <h4 class="fr">Forces (Strengths)</h4><h4 class="nl">Sterktes (Strengths)</h4><h4 class="en">Strengths</h4>
+                            <ul>
+                                <li class="fr">Continuité opérationnelle totale pour le back-office et les utilisateurs.</li>
+                                <li class="fr">Zéro coût d'implémentation additionnel.</li>
+                                <li class="fr">Modèle de licence actuel couvrant les 540 validateurs métiers sans surcoût.</li>
+                                <li class="nl">Volledige operationele continuïteit voor de back-office en de gebruikers.</li>
+                                <li class="nl">Geen bijkomende implementatiekosten.</li>
+                                <li class="nl">Huidig licentiemodel dekt de 540 bedrijfsvalidatoren zonder meerkost.</li>
+                                <li class="en">Total operational continuity for back-office and users.</li>
+                                <li class="en">Zero additional implementation cost.</li>
+                                <li class="en">Current license model covering the 540 business validators at no extra cost.</li>
+                            </ul>
+                        </div>
+                        <div class="swot-box w">
+                            <h4 class="fr">Faiblesses (Weaknesses)</h4><h4 class="nl">Zwaktes (Weaknesses)</h4><h4 class="en">Weaknesses</h4>
+                            <ul>
+                                <li class="fr">Maintient le statu quo sur une ergonomie et une interface parfois critiquées.</li>
+                                <li class="fr">Dépendance au fournisseur historique.</li>
+                                <li class="nl">Behoudt de status quo met betrekking tot een soms bekritiseerde ergonomie en interface.</li>
+                                <li class="nl">Afhankelijkheid van de historische leverancier.</li>
+                                <li class="en">Maintains the status quo on an ergonomics and interface sometimes criticized.</li>
+                                <li class="en">Dependence on the historical vendor.</li>
+                            </ul>
+                        </div>
+                        <div class="swot-box o">
+                            <h4 class="fr">Opportunités (Opportunities)</h4><h4 class="nl">Kansen (Opportunities)</h4><h4 class="en">Opportunities</h4>
+                            <ul>
+                                <li class="fr">Réallocation du budget "projet" économisé vers d'autres priorités d'infrastructure.</li>
+                                <li class="fr">Possibilité de rationaliser et d'optimiser les 57 workflows existants sans interruption.</li>
+                                <li class="nl">Herverdeling van het bespaarde "project"-budget naar andere infrastructuurprioriteiten.</li>
+                                <li class="nl">Mogelijkheid om de 57 bestaande workflows zonder onderbreking te rationaliseren en te optimaliseren.</li>
+                                <li class="en">Reallocation of saved "project" budget to other infrastructure priorities.</li>
+                                <li class="en">Possibility to rationalize and optimize the 57 existing workflows without interruption.</li>
+                            </ul>
+                        </div>
+                        <div class="swot-box t">
+                            <h4 class="fr">Menaces (Threats)</h4><h4 class="nl">Bedreigingen (Threats)</h4><h4 class="en">Threats</h4>
+                            <ul>
+                                <li class="fr">Pression potentielle des utilisateurs pour un changement d'interface si l'UX du portail n'est pas modernisée.</li>
+                                <li class="nl">Mogelijke druk van gebruikers voor een interface-wijziging als de UX van de portal niet wordt gemoderniseerd.</li>
+                                <li class="en">Potential user pressure for an interface change if the portal UX is not modernized.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SWOT 2 : Jira -->
+                <div id="swot-jira" class="swot-content">
+                    <div class="swot-header-subtitle">OPTION 2</div>
+                    <div class="swot-header-title">
+                        <span class="fr">Analyse SWOT : Jira Service Management</span>
+                        <span class="nl">SWOT Analyse : Jira Service Management</span>
+                        <span class="en">SWOT Analysis : Jira Service Management</span>
+                    </div>
+                    
+                    <div class="swot-grid">
+                        <div class="swot-box s">
+                            <h4 class="fr">Forces (Strengths)</h4><h4 class="nl">Sterktes (Strengths)</h4><h4 class="en">Strengths</h4>
+                            <ul>
+                                <li class="fr">Interface moderne et fortement orientée utilisateur.</li>
+                                <li class="fr">Consolidation technique avec l'écosystème Atlassian.</li>
+                                <li class="fr">Les approbateurs peuvent valider via le portail sans nécessiter de licence payante.</li>
+                                <li class="nl">Moderne en sterk gebruikersgerichte interface.</li>
+                                <li class="nl">Technische consolidatie met het Atlassian-ecosysteem.</li>
+                                <li class="nl">Goedkeurders kunnen valideren via de portal zonder dat een betaalde licentie nodig is.</li>
+                                <li class="en">Modern and highly user-oriented interface.</li>
+                                <li class="en">Technical consolidation with the Atlassian ecosystem.</li>
+                                <li class="en">Approvers can validate via the portal without requiring a paid license.</li>
+                            </ul>
+                        </div>
+                        <div class="swot-box w">
+                            <h4 class="fr">Faiblesses (Weaknesses)</h4><h4 class="nl">Zwaktes (Weaknesses)</h4><h4 class="en">Weaknesses</h4>
+                            <ul>
+                                <li class="fr">Coût d'intégration élevé estimé à plus de 184 000 € (CAPEX).</li>
+                                <li class="fr">Nécessite une refonte complète des paramétrages (CMDB, formulaires, SLA).</li>
+                                <li class="nl">Hoge integratiekosten geschat op meer dan 184.000 € (CAPEX).</li>
+                                <li class="nl">Vereist een volledige herziening van de instellingen (CMDB, formulieren, SLA).</li>
+                                <li class="en">High integration cost estimated at over €184,000 (CAPEX).</li>
+                                <li class="en">Requires a complete overhaul of the settings (CMDB, forms, SLAs).</li>
+                            </ul>
+                        </div>
+                        <div class="swot-box o">
+                            <h4 class="fr">Opportunités (Opportunities)</h4><h4 class="nl">Kansen (Opportunities)</h4><h4 class="en">Opportunities</h4>
+                            <ul>
+                                <li class="fr">Déploiement d'une plateforme ESM (Enterprise Service Management) unifiée pour l'IT, les RH et les services logistiques.</li>
+                                <li class="nl">Uitrol van een uniform ESM-platform (Enterprise Service Management) voor IT, HR en logistieke diensten.</li>
+                                <li class="en">Deployment of a unified ESM (Enterprise Service Management) platform for IT, HR, and logistics services.</li>
+                            </ul>
+                        </div>
+                        <div class="swot-box t">
+                            <h4 class="fr">Menaces (Threats)</h4><h4 class="nl">Bedreigingen (Threats)</h4><h4 class="en">Threats</h4>
+                            <ul>
+                                <li class="fr">La charge de projet accaparerait la bande passante de l'équipe (Eric, Danny), entrant en collision directe avec les impératifs de la migration Entra ID en cours.</li>
+                                <li class="nl">De projectlast zou de bandbreedte van het team (Eric, Danny) in beslag nemen en direct in botsing komen met de vereisten van de lopende Entra ID-migratie.</li>
+                                <li class="en">The project load would monopolize the team's bandwidth (Eric, Danny), directly colliding with the requirements of the ongoing Entra ID migration.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SWOT 3 : ServiceNow -->
+                <div id="swot-snow" class="swot-content">
+                    <div class="swot-header-subtitle">OPTION 3</div>
+                    <div class="swot-header-title">
+                        <span class="fr">Analyse SWOT : ServiceNow</span>
+                        <span class="nl">SWOT Analyse : ServiceNow</span>
+                        <span class="en">SWOT Analysis : ServiceNow</span>
+                    </div>
+                    
+                    <div class="swot-grid">
+                        <div class="swot-box s">
+                            <h4 class="fr">Forces (Strengths)</h4><h4 class="nl">Sterktes (Strengths)</h4><h4 class="en">Strengths</h4>
+                            <ul>
+                                <li class="fr">Leader mondial incontesté du marché ITSM.</li>
+                                <li class="fr">Puissance fonctionnelle, automatisation poussée et alignement ITIL incomparables.</li>
+                                <li class="nl">Onbetwiste wereldleider op de ITSM-markt.</li>
+                                <li class="nl">Ongeëvenaarde functionele kracht, vergaande automatisering en ITIL-afstemming.</li>
+                                <li class="en">Undisputed global leader in the ITSM market.</li>
+                                <li class="en">Incomparable functional power, advanced automation, and ITIL alignment.</li>
+                            </ul>
+                        </div>
+                        <div class="swot-box w">
+                            <h4 class="fr">Faiblesses (Weaknesses)</h4><h4 class="nl">Zwaktes (Weaknesses)</h4><h4 class="en">Weaknesses</h4>
+                            <ul>
+                                <li class="fr">Coûts d'intégration prohibitifs, estimés jusqu'à 300 000 €.</li>
+                                <li class="fr">Facturation des 600 approbateurs engendrant un surcoût de licence majeur de + 57 000 €/an.</li>
+                                <li class="nl">Prohibitieve integratiekosten, geschat tot 300.000 €.</li>
+                                <li class="nl">Facturering van 600 goedkeurders genereert een grote licentiekostentoeslag van + 57.000 €/jaar.</li>
+                                <li class="en">Prohibitive integration costs, estimated up to €300,000.</li>
+                                <li class="en">Billing for 600 approvers generating a major license surcharge of + €57,000/year.</li>
+                            </ul>
+                        </div>
+                        <div class="swot-box o">
+                            <h4 class="fr">Opportunités (Opportunities)</h4><h4 class="nl">Kansen (Opportunities)</h4><h4 class="en">Opportunities</h4>
+                            <ul>
+                                <li class="fr">Standardisation complète des processus à l'échelle globale de l'organisation.</li>
+                                <li class="nl">Volledige standaardisatie van processen op wereldschaal van de organisatie.</li>
+                                <li class="en">Complete standardization of processes at the global scale of the organization.</li>
+                            </ul>
+                        </div>
+                        <div class="swot-box t">
+                            <h4 class="fr">Menaces (Threats)</h4><h4 class="nl">Bedreigingen (Threats)</h4><h4 class="en">Threats</h4>
+                            <ul>
+                                <li class="fr">Le modèle de facturation par rôle fait exploser le TCO (Total Cost of Ownership), rendant l'équilibre budgétaire difficilement soutenable.</li>
+                                <li class="nl">Het op rollen gebaseerde factureringsmodel laat de TCO (Total Cost of Ownership) exploderen, waardoor het budgettaire evenwicht moeilijk houdbaar wordt.</li>
+                                <li class="en">The role-based billing model makes the TCO (Total Cost of Ownership) explode, making budget balance difficult to sustain.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SWOT 4 : GLPI -->
+                <div id="swot-glpi" class="swot-content">
+                    <div class="swot-header-subtitle">OPTION 4</div>
+                    <div class="swot-header-title">
+                        <span class="fr">Analyse SWOT : GLPI (Open Source)</span>
+                        <span class="nl">SWOT Analyse : GLPI (Open Source)</span>
+                        <span class="en">SWOT Analysis : GLPI (Open Source)</span>
+                    </div>
+                    
+                    <div class="swot-grid">
+                        <div class="swot-box s">
+                            <h4 class="fr">Forces (Strengths)</h4><h4 class="nl">Sterktes (Strengths)</h4><h4 class="en">Strengths</h4>
+                            <ul>
+                                <li class="fr">Gratuité des licences du cœur de l'application.</li>
+                                <li class="fr">Transparence du code et forte communauté d'utilisateurs active.</li>
+                                <li class="nl">Gratis licenties voor de kern van de applicatie.</li>
+                                <li class="nl">Transparantie van de code en sterke actieve gebruikerscommunity.</li>
+                                <li class="en">Free licenses for the core of the application.</li>
+                                <li class="en">Transparency of the code and a strong active user community.</li>
+                            </ul>
+                        </div>
+                        <div class="swot-box w">
+                            <h4 class="fr">Faiblesses (Weaknesses)</h4><h4 class="nl">Zwaktes (Weaknesses)</h4><h4 class="en">Weaknesses</h4>
+                            <ul>
+                                <li class="fr">Ergonomie générale perçue comme moins intuitive pour les utilisateurs.</li>
+                                <li class="fr">Nécessite un effort d'intégration lourd pour paramétrer et adapter nos modules ESM.</li>
+                                <li class="nl">Algemene ergonomie wordt als minder intuïtief ervaren voor gebruikers.</li>
+                                <li class="nl">Vereist een zware integratie-inspanning om onze ESM-modules in te stellen en aan te passen.</li>
+                                <li class="en">General ergonomics perceived as less intuitive for users.</li>
+                                <li class="en">Requires a heavy integration effort to configure and adapt our ESM modules.</li>
+                            </ul>
+                        </div>
+                        <div class="swot-box o">
+                            <h4 class="fr">Opportunités (Opportunities)</h4><h4 class="nl">Kansen (Opportunities)</h4><h4 class="en">Opportunities</h4>
+                            <ul>
+                                <li class="fr">Indépendance totale vis-à-vis des politiques tarifaires et des augmentations unilatérales des grands éditeurs.</li>
+                                <li class="nl">Volledige onafhankelijkheid van prijsbeleid en eenzijdige verhogingen door grote softwareleveranciers.</li>
+                                <li class="en">Total independence from pricing policies and unilateral increases by major software vendors.</li>
+                            </ul>
+                        </div>
+                        <div class="swot-box t">
+                            <h4 class="fr">Menaces (Threats)</h4><h4 class="nl">Bedreigingen (Threats)</h4><h4 class="en">Threats</h4>
+                            <ul>
+                                <li class="fr">Coûts cachés importants à court et moyen terme (infrastructure d'hébergement, temps humain requis pour l'intégration, la sécurisation continue et la maintenance).</li>
+                                <li class="nl">Aanzienlijke verborgen kosten op korte en middellange termijn (hostinginfrastructuur, benodigde menselijke tijd voor integratie, continue beveiliging en onderhoud).</li>
+                                <li class="en">Significant hidden costs in the short and medium term (hosting infrastructure, human time required for integration, continuous security, and maintenance).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SWOT 5 : Développement Interne -->
+                <div id="swot-net" class="swot-content">
+                    <div class="swot-header-subtitle">OPTION 5</div>
+                    <div class="swot-header-title">
+                        <span class="fr">Analyse SWOT : Développement interne (.NET)</span>
+                        <span class="nl">SWOT Analyse : Interne Ontwikkeling (.NET)</span>
+                        <span class="en">SWOT Analysis : Internal Development (.NET)</span>
+                    </div>
+                    
+                    <div class="swot-grid">
+                        <div class="swot-box s">
+                            <h4 class="fr">Forces (Strengths)</h4><h4 class="nl">Sterktes (Strengths)</h4><h4 class="en">Strengths</h4>
+                            <ul>
+                                <li class="fr">Prototype existant prouvant concrètement la faisabilité technique.</li>
+                                <li class="fr">Solution modélisée exactement autour des processus spécifiques du SFPD.</li>
+                                <li class="nl">Bestaand prototype dat de technische haalbaarheid concreet aantoont.</li>
+                                <li class="nl">Oplossing precies gemodelleerd rond de specifieke processen van de SFPD.</li>
+                                <li class="en">Existing prototype concretely proving technical feasibility.</li>
+                                <li class="en">Solution modeled exactly around the specific processes of the SFPD.</li>
+                            </ul>
+                        </div>
+                        <div class="swot-box w">
+                            <h4 class="fr">Faiblesses (Weaknesses)</h4><h4 class="nl">Zwaktes (Weaknesses)</h4><h4 class="en">Weaknesses</h4>
+                            <ul>
+                                <li class="fr">Absence de socle ITIL natif (tout doit être conçu et développé de zéro : SLA, CMDB, workflows, etc.).</li>
+                                <li class="fr">Responsabilité totale de l'équipe interne pour le maintien en conditions opérationnelles (MCO).</li>
+                                <li class="nl">Ontbreken van een native ITIL-basis (alles moet vanaf nul worden ontworpen en ontwikkeld: SLA, CMDB, workflows, enz.).</li>
+                                <li class="nl">Volledige verantwoordelijkheid van het interne team voor het behoud in operationele staat (MCO).</li>
+                                <li class="en">Lack of a native ITIL base (everything must be designed and developed from scratch: SLAs, CMDB, workflows, etc.).</li>
+                                <li class="en">Total responsibility of the internal team for maintaining operational conditions (MCO).</li>
+                            </ul>
+                        </div>
+                        <div class="swot-box o">
+                            <h4 class="fr">Opportunités (Opportunities)</h4><h4 class="nl">Kansen (Opportunities)</h4><h4 class="en">Opportunities</h4>
+                            <ul>
+                                <li class="fr">Flexibilité absolue et indépendance totale pour l'implémentation des évolutions futures.</li>
+                                <li class="nl">Absolute flexibiliteit en volledige onafhankelijkheid voor de implementatie van toekomstige evoluties.</li>
+                                <li class="en">Absolute flexibility and total independence for the implementation of future evolutions.</li>
+                            </ul>
+                        </div>
+                        <div class="swot-box t">
+                            <h4 class="fr">Menaces (Threats)</h4><h4 class="nl">Bedreigingen (Threats)</h4><h4 class="en">Threats</h4>
+                            <ul>
+                                <li class="fr">L'outil devient un composant critique reposant sur un nombre très restreint de collaborateurs internes (SPOF - Single Point of Failure).</li>
+                                <li class="fr">La gestion de la dette technique et des mises à jour critiques de sécurité absorberait de précieuses ressources au détriment de l'innovation métier.</li>
+                                <li class="nl">De tool wordt een kritiek onderdeel dat afhankelijk is van een zeer beperkt aantal interne medewerkers (SPOF - Single Point of Failure).</li>
+                                <li class="nl">Het beheer van de technische schuld en kritieke beveiligingsupdates zou waardevolle middelen opslokken ten koste van bedrijfsinnovatie.</li>
+                                <li class="en">The tool becomes a critical component relying on a very small number of internal collaborators (SPOF - Single Point of Failure).</li>
+                                <li class="en">Managing technical debt and critical security updates would absorb valuable resources to the detriment of business innovation.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card accent-blue">
+                <h2 class="fr">4. Fonctionnalités disponibles</h2>
+                <h2 class="nl">4. Beschikbare functionaliteiten</h2>
+                <h2 class="en">4. Available functionalities</h2>
+
+                <h3><span class="fr">Jira : un périmètre réduit pour tenir les délais</span><span class="nl">Jira: een beperkte scope om de deadlines te halen</span><span class="en">Jira: a reduced scope to meet the deadline</span></h3>
+
+                <div class="fr">
+                    <p>Afin de garantir une mise en production avant la fin de notre contrat actuel, l'offre concernant Jira Service Management repose sur un périmètre initial (MVP) strictement concentré sur l'urgence. Pour respecter ce calendrier contraint, l'intégrateur a fait le choix de décaler ou d'exclure certaines pratiques ITIL que nous utilisons néanmoins actuellement.</p>
+                </div>
+                <div class="nl">
+                    <p>Om een productie-inzet te garanderen vóór het einde van ons huidige contract, is het aanbod voor Jira Service Management gebaseerd op een initiële scope (MVP) die strikt gericht is op de urgentie. Om dit strakke tijdschema te respecteren, heeft de integrator ervoor gekozen om bepaalde ITIL-praktijken die we momenteel wel gebruiken, uit te stellen of uit te sluiten.</p>
+                </div>
+                <div class="en">
+                    <p>To guarantee a go-live before the end of our current contract, the Jira Service Management offer is based on an initial scope (MVP) strictly focused on urgency. To meet this tight schedule, the integrator chose to defer or exclude certain ITIL practices that we nevertheless currently use.</p>
+                </div>
+
+                <div class="callout callout-warning">
+                    <h4 class="fr">Écarts fonctionnels temporaires identifiés</h4>
+                    <h4 class="nl">Geïdentificeerde tijdelijke functionele afwijkingen</h4>
+                    <h4 class="en">Identified temporary functional gaps</h4>
+                    <ul class="fr">
+                        <li><strong>Gestion des Changements</strong> et <strong>Gestion des Problèmes</strong> repoussées à une phase ultérieure (Phase 4, post-migration).</li>
+                        <li>Implémentation d'une <strong>Base de Connaissances (Knowledge Base)</strong> explicitement exclue du périmètre initial du projet.</li>
+                    </ul>
+                    <ul class="nl">
+                        <li><strong>Change Management</strong> en <strong>Problem Management</strong> uitgesteld naar een latere fase (Fase 4, post-migratie).</li>
+                        <li>Implementatie van een <strong>Kennisbank (Knowledge Base)</strong> expliciet uitgesloten van de initiële projectscope.</li>
+                    </ul>
+                    <ul class="en">
+                        <li><strong>Change Management</strong> and <strong>Problem Management</strong> deferred to a later phase (Phase 4, post-migration).</li>
+                        <li>Implementation of a <strong>Knowledge Base</strong> explicitly excluded from the project's initial scope.</li>
+                    </ul>
+                </div>
+
+                <p class="fr">Bien que nous appréciions le pragmatisme et la transparence de cette démarche de la part de l'intégrateur, il était néanmoins essentiel de souligner cet écart fonctionnel temporaire.</p>
+                <p class="nl">Hoewel we het pragmatisme en de transparantie van deze aanpak van de integrator waarderen, was het niettemin essentieel om deze tijdelijke functionele afwijking te benadrukken.</p>
+                <p class="en">While we appreciate the integrator's pragmatism and transparency in this approach, it was nevertheless essential to highlight this temporary functional gap.</p>
+
+                <h3><span class="fr">ServiceNow : un manque de visibilité</span><span class="nl">ServiceNow: een gebrek aan zichtbaarheid</span><span class="en">ServiceNow: a lack of visibility</span></h3>
+
+                <div class="fr">
+                    <p>L'offre reçue à ce stade se limite à une simple estimation budgétaire préliminaire. Ce document n'étant pas complet d'un point de vue technique et fonctionnel, il est aujourd'hui très compliqué de savoir précisément quelles pratiques seraient implémentées nativement lors du déploiement, ni de connaître le phasage exact qui nous serait proposé. Toutefois, ServiceNow étant le leader incontesté du marché de l'ITSM, nous pouvons raisonnablement penser que la majorité des pratiques ITIL standard seront disponibles et couvertes par la plateforme.</p>
+                </div>
+                <div class="nl">
+                    <p>Het aanbod dat in dit stadium is ontvangen, blijft beperkt tot een eenvoudige voorlopige budgetraming. Aangezien dit document technisch en functioneel niet volledig is, is het momenteel erg moeilijk om precies te weten welke praktijken native zouden worden geïmplementeerd bij de uitrol, noch om de exacte fasering te kennen die ons zou worden voorgesteld. ServiceNow is echter de onbetwiste marktleider op het gebied van ITSM, dus mogen we redelijkerwijs aannemen dat de meeste standaard ITIL-praktijken beschikbaar zullen zijn en door het platform worden gedekt.</p>
+                </div>
+                <div class="en">
+                    <p>The offer received at this stage is limited to a simple preliminary budget estimate. As this document is not technically and functionally complete, it is currently very difficult to know precisely which practices would be natively implemented during deployment, nor the exact phasing that would be proposed to us. However, as ServiceNow is the undisputed market leader in ITSM, we can reasonably assume that the majority of standard ITIL practices will be available and covered by the platform.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3 : Synthèse Financière & TCO -->
+        <section id="finances" class="tab-pane">
+            <h1 class="fr">Synthèse Financière et Impact Opérationnel</h1>
+            <h1 class="nl">Financiële Synthese en Operationele Impact</h1>
+            <h1 class="en">Financial Synthesis and Operational Impact</h1>
+
+            <div class="card accent-blue">
+                <h2 class="fr">7. Matrice d'Arbitrage : Alignement Valeur vs Effort & Risque Projet</h2>
+                <h2 class="nl">7. Arbitragematrix: Waardealignement vs Inspanning & Projectrisico</h2>
+                <h2 class="en">7. Arbitration Matrix: Value Alignment vs Effort & Project Risk</h2>
+
+                <p class="fr">Cette matrice de synthèse positionne les cinq options selon deux axes : l'alignement avec la valeur métier attendue (axe vertical) et l'effort d'implémentation combiné au risque projet (axe horizontal).</p>
+                <p class="nl">Deze synthesematrix positioneert de vijf opties volgens twee assen: de afstemming op de verwachte bedrijfswaarde (verticale as) en de implementatie-inspanning gecombineerd met het projectrisico (horizontale as).</p>
+                <p class="en">This synthesis matrix positions the five options along two axes: alignment with expected business value (vertical axis) and implementation effort combined with project risk (horizontal axis).</p>
+
+                <div class="matrix-wrap">
+                    <svg viewBox="0 0 700 440" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Quadrant backgrounds -->
+                        <rect x="70" y="20" width="290" height="200" fill="#eff8fb"/>
+                        <rect x="360" y="20" width="270" height="200" fill="#eef2fb"/>
+                        <rect x="70" y="220" width="290" height="180" fill="#f8fafc"/>
+                        <rect x="360" y="220" width="270" height="180" fill="#fdf2f4"/>
+
+                        <!-- Axes -->
+                        <line x1="70" y1="400" x2="630" y2="400" stroke="#94a3b8" stroke-width="1.5"/>
+                        <line x1="70" y1="20" x2="70" y2="400" stroke="#94a3b8" stroke-width="1.5"/>
+
+                        <!-- Quadrant labels -->
+                        <text class="fr" x="215" y="40" text-anchor="middle" font-size="12" font-weight="700" fill="#2CA1AC">QUICK WIN</text>
+                        <text class="nl" x="215" y="40" text-anchor="middle" font-size="12" font-weight="700" fill="#2CA1AC">SNELLE WINST</text>
+                        <text class="en" x="215" y="40" text-anchor="middle" font-size="12" font-weight="700" fill="#2CA1AC">QUICK WIN</text>
+
+                        <text class="fr" x="495" y="40" text-anchor="middle" font-size="12" font-weight="700" fill="#1B2D5B">PARI STRATÉGIQUE</text>
+                        <text class="nl" x="495" y="40" text-anchor="middle" font-size="12" font-weight="700" fill="#1B2D5B">STRATEGISCHE GOK</text>
+                        <text class="en" x="495" y="40" text-anchor="middle" font-size="12" font-weight="700" fill="#1B2D5B">STRATEGIC BET</text>
+
+                        <text class="fr" x="215" y="238" text-anchor="middle" font-size="12" font-weight="700" fill="#64748b">PRIORITÉ FAIBLE</text>
+                        <text class="nl" x="215" y="238" text-anchor="middle" font-size="12" font-weight="700" fill="#64748b">LAGE PRIORITEIT</text>
+                        <text class="en" x="215" y="238" text-anchor="middle" font-size="12" font-weight="700" fill="#64748b">LOW PRIORITY</text>
+
+                        <text class="fr" x="495" y="238" text-anchor="middle" font-size="12" font-weight="700" fill="#B71E4C">INVESTISSEMENT RISQUÉ</text>
+                        <text class="nl" x="495" y="238" text-anchor="middle" font-size="12" font-weight="700" fill="#B71E4C">RISICOVOLLE INVESTERING</text>
+                        <text class="en" x="495" y="238" text-anchor="middle" font-size="12" font-weight="700" fill="#B71E4C">RISKY INVESTMENT</text>
+
+                        <!-- Axis titles -->
+                        <text class="fr" x="350" y="425" text-anchor="middle" font-size="13" fill="#334155">Effort &amp; Risque Projet →</text>
+                        <text class="nl" x="350" y="425" text-anchor="middle" font-size="13" fill="#334155">Inspanning &amp; Projectrisico →</text>
+                        <text class="en" x="350" y="425" text-anchor="middle" font-size="13" fill="#334155">Effort &amp; Project Risk →</text>
+
+                        <text class="fr" x="-210" y="18" text-anchor="middle" font-size="13" fill="#334155" transform="rotate(-90)">↑ Alignement Valeur Métier</text>
+                        <text class="nl" x="-210" y="18" text-anchor="middle" font-size="13" fill="#334155" transform="rotate(-90)">↑ Afstemming Bedrijfswaarde</text>
+                        <text class="en" x="-210" y="18" text-anchor="middle" font-size="13" fill="#334155" transform="rotate(-90)">↑ Business Value Alignment</text>
+
+                        <!-- Bubbles: EasyVista (low effort, high value) -->
+                        <circle cx="150" cy="110" r="34" fill="#1B2D5B" opacity="0.85"/>
+                        <text x="150" y="115" text-anchor="middle" font-size="12" fill="white" font-weight="700">EV</text>
+
+                        <!-- Jira (medium effort, medium-high value) -->
+                        <circle cx="400" cy="150" r="30" fill="#2CA1AC" opacity="0.85"/>
+                        <text x="400" y="155" text-anchor="middle" font-size="11" fill="white" font-weight="700">Jira</text>
+
+                        <!-- ServiceNow (high effort, high value) -->
+                        <circle cx="545" cy="110" r="32" fill="#B71E4C" opacity="0.85"/>
+                        <text x="545" y="115" text-anchor="middle" font-size="11" fill="white" font-weight="700">SNow</text>
+
+                        <!-- GLPI (medium effort, low value) -->
+                        <circle cx="440" cy="320" r="26" fill="#eab308" opacity="0.9"/>
+                        <text x="440" y="325" text-anchor="middle" font-size="11" fill="#1B2D5B" font-weight="700">GLPI</text>
+
+                        <!-- Dev interne .NET (high risk, variable value) -->
+                        <circle cx="560" cy="300" r="26" fill="#64748b" opacity="0.9"/>
+                        <text x="560" y="305" text-anchor="middle" font-size="10" fill="white" font-weight="700">.NET</text>
+                    </svg>
+                </div>
+                <div class="matrix-legend">
+                    <span><i style="background:#1B2D5B;"></i> EasyVista (Pack Pro)</span>
+                    <span><i style="background:#2CA1AC;"></i> Jira Service Management</span>
+                    <span><i style="background:#B71E4C;"></i> ServiceNow</span>
+                    <span><i style="background:#eab308;"></i> GLPI</span>
+                    <span><i style="background:#64748b;"></i> <span class="fr">Développement interne (.NET)</span><span class="nl">Interne ontwikkeling (.NET)</span><span class="en">Internal development (.NET)</span></span>
+                </div>
+                <p class="fr" style="font-size:0.85rem;color:var(--text-light);">Représentation synthétique et illustrative issue de l'analyse comparative avancée du dossier de renouvellement.</p>
+                <p class="nl" style="font-size:0.85rem;color:var(--text-light);">Synthetische en illustratieve weergave op basis van de geavanceerde vergelijkende analyse van het vernieuwingsdossier.</p>
+                <p class="en" style="font-size:0.85rem;color:var(--text-light);">Synthetic and illustrative representation drawn from the advanced comparative analysis of the renewal file.</p>
+            </div>
+
+            <div class="card">
+                <h2 class="fr">Analyse Comparative du TCO (3 Ans)</h2>
+                <h2 class="nl">Vergelijkende TCO-analyse (3 Jaar)</h2>
+                <h2 class="en">Comparative TCO Analysis (3 Years)</h2>
+                
+                <div class="stat-strip">
+                    <span class="stat-pill fr">Période : 01/05/2027 → 30/04/2030</span>
+                    <span class="stat-pill nl">Periode: 01/05/2027 → 30/04/2030</span>
+                    <span class="stat-pill en">Period: 05/01/2027 → 04/30/2030</span>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span class="fr">Solution</span>
+                                    <span class="nl">Oplossing</span>
+                                    <span class="en">Solution</span>
+                                </th>
+                                <th>
+                                    <span class="fr">Implémentation (CAPEX)</span>
+                                    <span class="nl">Implementatie (CAPEX)</span>
+                                    <span class="en">Implementation (CAPEX)</span>
+                                </th>
+                                <th>
+                                    <span class="fr">Licences (OPEX - An 1)</span>
+                                    <span class="nl">Licenties (OPEX - Jaar 1)</span>
+                                    <span class="en">Licenses (OPEX - Yr 1)</span>
+                                </th>
+                                <th>
+                                    <span class="fr">Licences (OPEX - An 2 & 3)</span>
+                                    <span class="nl">Licenties (OPEX - Jaar 2 & 3)</span>
+                                    <span class="en">Licenses (OPEX - Yr 2 & 3)</span>
+                                </th>
+                                <th>
+                                    <span class="fr">TCO Cumulé / 3 Ans (HT)</span>
+                                    <span class="nl">Gecumuleerde TCO / 3 Jaar (ex. BTW)</span>
+                                    <span class="en">Cumulative TCO / 3 Yrs (ex. VAT)</span>
+                                </th>
+                                <th>
+                                    <span class="fr">Coût Annuel Moyen</span>
+                                    <span class="nl">Gemiddelde Jaarlijkse Kost</span>
+                                    <span class="en">Average Annual Cost</span>
+                                </th>
+                                <th>
+                                    <span class="fr">Impact Interne</span>
+                                    <span class="nl">Interne Impact</span>
+                                    <span class="en">Internal Impact</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <strong>
+                                        <span class="fr">Solution actuelle (Continuité)</span>
+                                        <span class="nl">Huidige Oplossing (Continuïteit)</span>
+                                        <span class="en">Current Solution (Continuity)</span>
+                                    </strong>
+                                </td>
+                                <td>0 €</td>
+                                <td>126.043 €</td>
+                                <td>126.043 € / an <span class="fr">(contrat 3 ans)</span><span class="nl">(contract 3 jaar)</span><span class="en">(3-year contract)</span></td>
+                                <td><strong>372.129 €</strong></td>
+                                <td><strong>124.043 €</strong></td>
+                                <td>
+                                    <span class="fr">Nul. Continuité assurée.</span>
+                                    <span class="nl">Geen. Continuïteit verzekerd.</span>
+                                    <span class="en">None. Continuity assured.</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Jira Service Management</strong></td>
+                                <td>184.837 €</td>
+                                <td>70.240 €</td>
+                                <td>~ 77.264 € / an <span class="fr">(indexation 10 %)</span><span class="nl">(indexatie 10 %)</span><span class="en">(10% indexation)</span></td>
+                                <td><strong>416.629 €</strong></td>
+                                <td><strong>138.876 €</strong></td>
+                                <td>
+                                    <span class="fr">Élevé. 161 jours-homme (MD).</span>
+                                    <span class="nl">Hoog. 161 mandagen (MD).</span>
+                                    <span class="en">High. 161 man-days (MD).</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>ServiceNow <span class="fr">(Standard + Approvers)</span><span class="nl">(Standard + Approvers)</span><span class="en">(Standard + Approvers)</span></strong></td>
+                                <td>~ 275.000 €</td>
+                                <td>~ 109.536 €</td>
+                                <td>~ 109.536 € / an</td>
+                                <td><strong>603.608 €</strong></td>
+                                <td><strong>201.202 €</strong></td>
+                                <td rowspan="2">
+                                    <span class="fr">Très élevé. Projet estimé entre 18 et 20 semaines minimum.</span>
+                                    <span class="nl">Zeer hoog. Project geraamd op minimaal 18 tot 20 weken.</span>
+                                    <span class="en">Very high. Project estimated at a minimum of 18 to 20 weeks.</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>ServiceNow <span class="fr">(Professional + Approvers)</span><span class="nl">(Professional + Approvers)</span><span class="en">(Professional + Approvers)</span></strong></td>
+                                <td>~ 275.000 €</td>
+                                <td>~ 135.782 €</td>
+                                <td>~ 135.782 € / an</td>
+                                <td><strong>682.346 €</strong></td>
+                                <td><strong>227.448 €</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <p class="fr">Bien que l'option Jira Service Management affiche un coût de licence nominal inférieur la première année, le coût d'intégration initial de 184 837 € neutralise totalement ce gain sur 3 ans. De plus, ce calcul de TCO purement financier n'inclut pas le coût d'opportunité interne majeur (161 jours-homme de prestation externe et implication massive de nos administrateurs).</p>
+                
+                <p class="nl">Hoewel de optie Jira Service Management in het eerste jaar een lagere nominale licentiekost laat zien, neutraliseert de initiële integratiekost van 184.837 € deze winst over 3 jaar volledig. Bovendien omvat deze puur financiële TCO-berekening niet de grote interne opportuniteitskosten (161 mandagen aan externe dienstverlening en massale betrokkenheid van onze beheerders).</p>
+                
+                <p class="en">Although the Jira Service Management option shows a lower nominal license cost the first year, the initial integration cost of €184,837 totally neutralizes this gain over 3 years. Furthermore, this purely financial TCO calculation does not include the major internal opportunity cost (161 man-days of external service and massive involvement of our administrators).</p>
+            </div>
+        </section>
+
+ <!-- SECTION 4 : Souveraineté & Risques (Version Multilingue) -->
+<section id="souverainete" class="tab-pane">
+    <h1>
+        <span class="fr">8. Souveraineté Numérique, RGPD & NIS2</span>
+        <span class="nl">8. Digitale Soevereiniteit, AVG & NIS2</span>
+        <span class="en">8. Digital Sovereignty, GDPR & NIS2</span>
+    </h1>
+
+    <div class="card accent-rose">
+        <p class="fr"><strong>Dans le cadre des obligations des administrations publiques européennes, le choix d'un outil de gestion des services et des actifs (contenant des données nominatives d'agents, de citoyens, et la cartographie technique de nos infrastructures) doit impérativement intégrer les risques juridiques liés à l'hébergement et à la nationalité des éditeurs.</strong></p>
+        <p class="nl"><strong>In het kader van de verplichtingen van Europese overheidsdiensten moet de keuze van een tool voor service- en assetbeheer (met persoonsgegevens van medewerkers, burgers, en de technische cartografie van onze infrastructuur) noodzakelijkerwijs rekening houden met de juridische risico's verbonden aan de hosting en de nationaliteit van de leveranciers.</strong></p>
+        <p class="en"><strong>As part of the obligations of European public administrations, the choice of a service and asset management tool (containing personal data of staff, citizens, and the technical mapping of our infrastructure) must imperatively factor in the legal risks linked to hosting location and vendor nationality.</strong></p>
+    </div>
+
+    <div class="card">
+        <h2>
+            <span class="fr">Tableau Comparatif de la Souveraineté et de la Conformité</span>
+            <span class="nl">Vergelijkingstabel Soevereiniteit en Conformiteit</span>
+            <span class="en">Sovereignty and Compliance Comparison Table</span>
+        </h2>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th><span class="fr">Critère</span><span class="nl">Criterium</span><span class="en">Criterion</span></th>
+                        <th>EasyVista <span class="fr">(Pack Pro)</span><span class="nl">(Pack Pro)</span><span class="en">(Pack Pro)</span></th>
+                        <th>Jira Service Management</th>
+                        <th>ServiceNow</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="fr">Nationalité de l'éditeur</span><span class="nl">Nationaliteit uitgever</span><span class="en">Vendor nationality</span></td>
+                        <td><span class="fr">Européenne (France)</span><span class="nl">Europees (Frankrijk)</span><span class="en">European (France)</span></td>
+                        <td><span class="fr">Américaine (Australie/USA)</span><span class="nl">Amerikaans (Australië/VS)</span><span class="en">American (Australia/USA)</span></td>
+                        <td><span class="fr">Américaine (USA)</span><span class="nl">Amerikaans (VS)</span><span class="en">American (USA)</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="fr">Soumission aux lois extraterritoriales</span><span class="nl">Onderworpen aan extraterritoriale wetten</span><span class="en">Subject to extraterritorial laws</span></td>
+                        <td><span class="fr">Non soumis au Cloud Act US ni au Patriot Act.</span><span class="nl">Niet onderworpen aan de Amerikaanse Cloud Act of Patriot Act.</span><span class="en">Not subject to the US Cloud Act nor the Patriot Act.</span></td>
+                        <td><span class="fr">Soumis au Cloud Act (Atlassian Inc. est une entité US).</span><span class="nl">Onderworpen aan de Cloud Act (Atlassian Inc. is een Amerikaanse entiteit).</span><span class="en">Subject to the Cloud Act (Atlassian Inc. is a US entity).</span></td>
+                        <td><span class="fr">Soumis au Cloud Act (ServiceNow Inc. est une entité US).</span><span class="nl">Onderworpen aan de Cloud Act (ServiceNow Inc. is een Amerikaanse entiteit).</span><span class="en">Subject to the Cloud Act (ServiceNow Inc. is a US entity).</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="fr">Localisation du SaaS</span><span class="nl">Locatie van de SaaS</span><span class="en">SaaS location</span></td>
+                        <td><span class="fr">France (Europe) — Datacenters souverains ISO 27001.</span><span class="nl">Frankrijk (Europa) — Soevereine datacenters ISO 27001.</span><span class="en">France (Europe) — Sovereign ISO 27001 datacenters.</span></td>
+                        <td><span class="fr">Europe de l'Ouest (AWS) ou Global selon l'instance.</span><span class="nl">West-Europa (AWS) of wereldwijd, afhankelijk van de instantie.</span><span class="en">Western Europe (AWS) or Global depending on the instance.</span></td>
+                        <td><span class="fr">Europe (Francfort/Amsterdam) ou via le cloud sécurisé de Smals.</span><span class="nl">Europa (Frankfurt/Amsterdam) of via de beveiligde cloud van Smals.</span><span class="en">Europe (Frankfurt/Amsterdam) or via Smals' secure cloud.</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="fr">Alternative On-Premise</span><span class="nl">On-Premise alternatief</span><span class="en">On-Premise alternative</span></td>
+                        <td><span class="fr">Disponible (déploiement sur nos propres serveurs existants).</span><span class="nl">Beschikbaar (implementatie op onze bestaande eigen servers).</span><span class="en">Available (deployment on our existing own servers).</span></td>
+                        <td><span class="fr">Non disponible (la version "Server" est définitivement arrêtée par Atlassian, forçant le passage au Cloud).</span><span class="nl">Niet beschikbaar (de "Server"-versie is definitief stopgezet door Atlassian, wat de overstap naar de Cloud verplicht).</span><span class="en">Not available ("Server" version permanently discontinued by Atlassian, forcing a move to the Cloud).</span></td>
+                        <td><span class="fr">Théoriquement possible mais extrêmement complexe, coûteux et déconseillé par l'éditeur.</span><span class="nl">Theoretisch mogelijk maar uiterst complex, kostbaar en afgeraden door de leverancier.</span><span class="en">Theoretically possible but extremely complex, costly, and discouraged by the vendor.</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="fr">Conformité RGPD</span><span class="nl">AVG-conformiteit</span><span class="en">GDPR compliance</span></td>
+                        <td><span class="fr">Garantie native (pas de transfert de données hors EEE, contrat de droit européen).</span><span class="nl">Native garantie (geen gegevensoverdracht buiten de EER, contract onder Europees recht).</span><span class="en">Native guarantee (no data transfer outside the EEA, contract under European law).</span></td>
+                        <td><span class="fr">Nécessite des clauses contractuelles types (CCT) complexes pour pallier le risque de transfert vers les USA.</span><span class="nl">Vereist complexe modelcontractbepalingen (SCC's) om het risico van overdracht naar de VS te ondervangen.</span><span class="en">Requires complex standard contractual clauses (SCCs) to mitigate the risk of transfer to the USA.</span></td>
+                        <td><span class="fr">Nécessite des clauses contractuelles types (CCT) et des audits de transfert (TIA) rigoureux.</span><span class="nl">Vereist modelcontractbepalingen (SCC's) en strikte transferaudits (TIA).</span><span class="en">Requires standard contractual clauses (SCCs) and rigorous transfer impact assessments (TIA).</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="fr">Alignement NIS2</span><span class="nl">Afstemming NIS2</span><span class="en">NIS2 alignment</span></td>
+                        <td><span class="fr">Optimal : certification ISO 27001 et SOC 2, maîtrise totale de la chaîne d'approvisionnement européenne.</span><span class="nl">Optimaal: ISO 27001- en SOC 2-certificering, volledige controle over de Europese toeleveringsketen.</span><span class="en">Optimal: ISO 27001 and SOC 2 certification, full control of the European supply chain.</span></td>
+                        <td><span class="fr">Conforme sur le plan technique, mais introduit un risque juridique sur la confidentialité des métadonnées d'infrastructure.</span><span class="nl">Technisch conform, maar introduceert een juridisch risico voor de vertrouwelijkheid van infrastructuurmetadata.</span><span class="en">Technically compliant, but introduces a legal risk regarding the confidentiality of infrastructure metadata.</span></td>
+                        <td><span class="fr">Conforme sur le plan technique, mais risque d'ingérence juridique étrangère sur des données d'infrastructure critique.</span><span class="nl">Technisch conform, maar risico op buitenlandse juridische inmenging bij kritieke infrastructuurgegevens.</span><span class="en">Technically compliant, but risk of foreign legal interference on critical infrastructure data.</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3><span class="fr">Analyse Critique des Risques</span><span class="nl">Kritische Risicoanalyse</span><span class="en">Critical Risk Analysis</span></h3>
+
+<p>
+    <span class="fr"><strong>1. Le Risque Extraterritorial (Cloud Act &amp; Patriot Act) :</strong> Jira et ServiceNow (USA) hébergent techniquement les données sur le sol européen, toutefois, leur nationalité américaine les soumet légalement au <em>US Cloud Act</em>. Cette loi permet aux autorités judiciaires ou de renseignement américain de contraindre un éditeur US à fournir les données hébergées à l'étranger, sans que l'État souverain européen n'en soit informé. Pour une CMDB répertoriant nos serveurs, applications et accès, ce risque de fuite d'informations critiques d'infrastructure est un point de vigilance NIS2 majeur. EasyVista (France), en tant qu'éditeur français, garantit une immunité face à ces lois extraterritoriales : les données restent protégées sous le seul régime de la législation belge et européenne.</span>
+    <span class="nl"><strong>1. Extraterritoriaal risico (Cloud Act &amp; Patriot Act) :</strong> Jira en ServiceNow (VS) hosten hun gegevens technisch op Europees grondgebied, maar hun Amerikaanse nationaliteit onderwerpt hen wettelijk aan de <em>US Cloud Act</em>. Deze wet stelt Amerikaanse gerechtelijke of inlichtingendiensten in staat een Amerikaanse uitgever te dwingen in het buitenland gehoste gegevens te verstrekken, zonder de soevereine Europese staat hiervan op de hoogte te stellen. Voor een CMDB met al onze servers, applicaties en toegangsrechten is dit risico op het lekken van kritieke infrastructuurinformatie een belangrijk NIS2-aandachtspunt. EasyVista (Frankrijk) garandeert als Franse uitgever immuniteit tegen deze extraterritoriale wetten: de gegevens blijven uitsluitend beschermd onder de Belgische en Europese wetgeving.</span>
+    <span class="en"><strong>1. Extraterritorial Risk (Cloud Act &amp; Patriot Act):</strong> Jira and ServiceNow (USA) technically host data on European soil, however, their American nationality legally subjects them to the <em>US Cloud Act</em>. This law allows US judicial or intelligence authorities to compel a US vendor to hand over data hosted abroad, without the sovereign European state being informed. For a CMDB listing our servers, applications and access rights, this risk of critical infrastructure information leakage is a major NIS2 concern. EasyVista (France), as a French vendor, guarantees immunity against these extraterritorial laws: the data remains protected solely under Belgian and European law.</span>
+</p>
+
+<p>
+    <span class="fr"><strong>2. L'alternative On-Premise :</strong> Atlassian a définitivement acté la fin de ses licences Jira Server (On-Premise) pour pousser ses clients vers le modèle Jira Cloud, ce qui nous lierait à leur infrastructure cloud publique. EasyVista conserve une flexibilité architecturale : si nos exigences de sécurité NIS2 ou de souveraineté devaient se durcir à l'avenir, la possibilité de rapatrier l'outil On-Premise sur nos propres serveurs reste une option contractuelle et technique viable, confirmée par l'éditeur.</span>
+    <span class="nl"><strong>2. Het On-Premise alternatief :</strong> Atlassian heeft definitief de stopzetting van zijn Jira Server-licenties (On-Premise) doorgevoerd om klanten naar het Jira Cloud-model te duwen, wat ons zou binden aan hun publieke cloudinfrastructuur. EasyVista behoudt architecturale flexibiliteit: mochten onze NIS2- of soevereiniteitseisen in de toekomst verstrengen, dan blijft het repatriëren van de tool On-Premise naar onze eigen servers een haalbare contractuele en technische optie, bevestigd door de leverancier.</span>
+    <span class="en"><strong>2. The On-Premise Alternative:</strong> Atlassian has definitively discontinued its Jira Server (On-Premise) licenses to push clients toward the Jira Cloud model, which would tie us to their public cloud infrastructure. EasyVista retains architectural flexibility: should our NIS2 or sovereignty requirements tighten in the future, repatriating the tool On-Premise to our own servers remains a viable contractual and technical option, confirmed by the vendor.</span>
+</p>
+
+<p>
+    <span class="fr"><strong>3. Conformité NIS2 et la "Supply Chain Security" :</strong> La directive NIS2 impose une surveillance stricte de la sécurité des chaînes d'approvisionnement des administrations publiques. Choisir un prestataire européen dont l'intégralité de la chaîne de support, d'administration et de développement se situe dans l'Espace Économique Européen (EEE) réduit considérablement le niveau de risque lors de nos audits de conformité de sécurité nationaux.</span>
+    <span class="nl"><strong>3. NIS2-conformiteit en "Supply Chain Security" :</strong> De NIS2-richtlijn vereist een strikte monitoring van de veiligheid van de toeleveringsketens van overheidsdiensten. Door te kiezen voor een Europese leverancier wiens volledige support-, beheer- en ontwikkelingsketen zich in de Europese Economische Ruimte (EER) bevindt, verlagen we aanzienlijk ons risiconiveau tijdens nationale conformiteitsaudits.</span>
+    <span class="en"><strong>3. NIS2 Compliance and "Supply Chain Security":</strong> The NIS2 directive requires strict monitoring of the security of public administrations' supply chains. Choosing a European provider whose entire support, administration and development chain is anchored within the European Economic Area (EEA) considerably reduces our risk level during national security compliance audits.</span>
+</p>
+    </div>
+</section>
+
+        <!-- TAB 5 : Recommandation Finale -->
+<section id="recommandation" class="tab-pane">
+    <h1 class="fr">Synthèse et Arbitrage Stratégique</h1>
+    <h1 class="nl">Synthese en Strategische Arbitrage</h1>
+    <h1 class="en">Synthesis and Strategic Arbitrage</h1>
+    
+    <div class="card accent-rose">
+        <div class="fr">
+            <p>L'évaluation objective des différentes solutions met en exergue un point de bascule critique entre l'apport fonctionnel d'une nouvelle plateforme et les risques inhérents à une migration. Les solutions alternatives évaluées exigent des investissements initiaux massifs (avec des coûts d'intégration pouvant atteindre 300 000 €) et imposent un changement de modèle de licence lourdement pénalisant, notamment par la facturation nouvelle de nos 540 validateurs métiers, qui opèrent aujourd'hui sans surcoût.</p>
+            
+            <p>Au-delà de l'impact budgétaire (CAPEX et OPEX), le coût d'opportunité interne d'une telle transition constitue un point de blocage majeur. Un projet d'intégration d'une telle envergure exigerait une mobilisation à temps plein de plusieurs profils clés en interne (notamment Eric Burhin, Danny Herpol, et le Service Desk). Cette charge de travail entrerait en collision directe avec nos activités opérationnelles quotidiennes, engendrant un risque non négligeable de retard ou de report pour certains de nos projets en cours.</p>
+            
+            <p>Enfin, face aux nouvelles exigences européennes de sécurité (NIS2), la protection de notre CMDB et de nos processus exige des garanties strictes d'immunité face aux législations extraterritoriales (tel que le Cloud Act américain), un critère qui réduit considérablement les options viables sur le marché.</p>
+            
+            <div style="background-color: var(--primary); color: white; padding: 25px; border-radius: 8px; margin-top: 30px;">
+                <p style="margin-bottom: 20px;">Au regard de ces éléments factuels et des échéances de nos marchés publics, deux trajectoires stratégiques peuvent être adoptées :</p>
+                <ul style="margin-bottom: 0;">
+                    <li style="margin-bottom: 15px;"><strong>Trajectoire A (Transformation) :</strong> Engager une refonte structurelle vers une plateforme tierce, impliquant un investissement initial de 184 000 € à 300 000 €, une mobilisation forte de nos ressources internes au détriment d'autres projets, et l'acceptation d'un risque juridique lié aux législations extraterritoriales.</li>
+                    <li><strong>Trajectoire B (Pérennisation) :</strong> Privilégier la stabilité opérationnelle en consolidant l'écosystème européen actuel, garantissant un coût d'implémentation nul, le maintien de la gratuité pour nos 540 validateurs, et une conformité stricte et protectrice vis-à-vis de la directive NIS2.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="nl">
+            <p>De objectieve evaluatie van de verschillende oplossingen benadrukt een kritiek kantelpunt tussen de functionele toegevoegde waarde van een nieuw platform en de risico's die inherent zijn aan een migratie. De geëvalueerde alternatieve oplossingen vereisen enorme initiële investeringen (met integratiekosten tot 300.000 €) en leggen een zwaar bestraffende verandering van het licentiemodel op, met name door de nieuwe facturering van onze 540 bedrijfsvalidatoren, die vandaag zonder extra kosten opereren.</p>
+            
+            <p>Buiten de budgettaire impact (CAPEX en OPEX), vormt de interne opportuniteitskost van een dergelijke transitie een belangrijk struikelblok. Een integratieproject van deze omvang zou een fulltime inzet vereisen van verschillende sleutelprofielen intern (met name Eric Burhin, Danny Herpol en de Service Desk). Deze werklast zou direct in botsing komen met onze dagelijkse operationele activiteiten, wat een niet te verwaarlozen risico op vertraging of uitstel voor sommige van onze lopende projecten met zich meebrengt.</p>
+            
+            <p>Ten slotte, geconfronteerd met de nieuwe Europese veiligheidseisen (NIS2), vereist de bescherming van onze CMDB en onze processen strikte garanties van immuniteit tegen extraterritoriale wetgeving (zoals de Amerikaanse Cloud Act), een criterium dat de levensvatbare opties op de markt aanzienlijk vermindert.</p>
+            
+            <div style="background-color: var(--primary); color: white; padding: 25px; border-radius: 8px; margin-top: 30px;">
+                <p style="margin-bottom: 20px;">In het licht van deze feitelijke elementen en de deadlines van onze overheidsopdrachten, kunnen twee strategische trajecten worden gevolgd:</p>
+                <ul style="margin-bottom: 0;">
+                    <li style="margin-bottom: 15px;"><strong>Traject A (Transformatie):</strong> Een structurele herziening naar een extern platform starten, wat een initiële investering van € 184.000 tot € 300.000 met zich meebrengt, een sterke mobilisatie van onze interne middelen ten koste van andere projecten, en de acceptatie van een juridisch risico verbonden aan extraterritoriale wetgevingen.</li>
+                    <li><strong>Traject B (Bestendiging):</strong> Voorrang geven aan operationele stabiliteit door het huidige Europese ecosysteem te consolideren, wat garant staat voor nul implementatiekosten, het behoud van kosteloosheid voor onze 540 validatoren, en een strikte en beschermende naleving van de NIS2-richtlijn.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="en">
+            <p>The objective evaluation of the different solutions highlights a critical tipping point between the functional contribution of a new platform and the risks inherent in a migration. The alternative solutions evaluated require massive initial investments (with integration costs reaching up to €300,000) and impose a heavily penalizing change in the licensing model, notably through the new billing of our 540 business validators, who operate today at no extra cost.</p>
+            
+            <p>Beyond the budgetary impact (CAPEX and OPEX), the internal opportunity cost of such a transition constitutes a major stumbling block. An integration project of this magnitude would require full-time mobilization of several key internal profiles (notably Eric Burhin, Danny Herpol, and the Service Desk). This workload would directly collide with our daily operational activities, generating a significant risk of delay or postponement for some of our ongoing projects.</p>
+            
+            <p>Finally, faced with the new European security requirements (NIS2), the protection of our CMDB and our processes requires strict guarantees of immunity against extraterritorial legislation (such as the American Cloud Act), a criterion that considerably reduces the viable options on the market.</p>
+            
+            <div style="background-color: var(--primary); color: white; padding: 25px; border-radius: 8px; margin-top: 30px;">
+                <p style="margin-bottom: 20px;">In light of these factual elements and the deadlines of our public contracts, two strategic trajectories can be adopted:</p>
+                <ul style="margin-bottom: 0;">
+                    <li style="margin-bottom: 15px;"><strong>Trajectory A (Transformation):</strong> Initiate a structural overhaul towards a third-party platform, involving an initial investment of €184,000 to €300,000, a strong mobilization of our internal resources to the detriment of other projects, and the acceptance of a legal risk linked to extraterritorial legislation.</li>
+                    <li><strong>Trajectory B (Sustainability):</strong> Prioritize operational stability by consolidating the current European ecosystem, guaranteeing zero implementation costs, maintaining free access for our 540 validators, and strict, protective compliance with the NIS2 directive.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+    </main>
+
+    <script>
+        // Gestion de la navigation principale
+        function openTab(evt, tabName) {
+            var tabPanes = document.getElementsByClassName("tab-pane");
+            for (var i = 0; i < tabPanes.length; i++) {
+                tabPanes[i].style.display = "none";
+                tabPanes[i].classList.remove("active");
+            }
+            var navBtns = document.getElementsByClassName("nav-btn");
+            for (var i = 0; i < navBtns.length; i++) {
+                navBtns[i].classList.remove("active");
+            }
+            var targetPane = document.getElementById(tabName);
+            targetPane.style.display = "block";
+            setTimeout(function() { targetPane.classList.add("active"); }, 10);
+            evt.currentTarget.classList.add("active");
+            document.querySelector('.main-content').scrollTop = 0;
+        }
+
+        // Gestion de la navigation des sous-onglets SWOT
+        function showSwot(evt, id) {
+            var swotContents = document.getElementsByClassName("swot-content");
+            for (var i = 0; i < swotContents.length; i++) {
+                swotContents[i].style.display = "none";
+                swotContents[i].classList.remove("active");
+            }
+            var swotBtns = document.getElementsByClassName("swot-tab-btn");
+            for (var i = 0; i < swotBtns.length; i++) {
+                swotBtns[i].classList.remove("active");
+            }
+            var targetSwot = document.getElementById(id);
+            targetSwot.style.display = "block";
+            setTimeout(function() { targetSwot.classList.add("active"); }, 10);
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Gestion du système multilingue
+        function switchLanguage(lang) {
+            document.body.className = 'lang-' + lang;
+            var langBtns = document.getElementsByClassName("lang-btn");
+            for(var i = 0; i < langBtns.length; i++) {
+                langBtns[i].classList.remove("active");
+            }
+            document.getElementById("btn-" + lang).classList.add("active");
+        }
+    </script>
+</body>
+</html>
